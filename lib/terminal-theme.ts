@@ -125,22 +125,21 @@ export function getTheme(name: string | null | undefined): TerminalTheme {
 
 export type TerminalLockscreenConfig = {
   theme: TerminalTheme;
-  backgroundUrl: string | null;
 };
 
+// Custom background photos were removed — clinics use the theme presets only.
+// The terminal_background_url column stays in the DB for now (harmless) but
+// isn't read anywhere in the app.
 export async function loadTerminalConfig(): Promise<TerminalLockscreenConfig> {
   try {
     const admin = createAdminClient();
     const { data } = await admin
       .from("clinic_settings")
-      .select("terminal_theme, terminal_background_url")
+      .select("terminal_theme")
       .eq("id", true)
       .maybeSingle();
-    return {
-      theme: getTheme(data?.terminal_theme),
-      backgroundUrl: data?.terminal_background_url || null,
-    };
+    return { theme: getTheme(data?.terminal_theme) };
   } catch {
-    return { theme: getTheme(null), backgroundUrl: null };
+    return { theme: getTheme(null) };
   }
 }

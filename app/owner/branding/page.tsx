@@ -24,7 +24,6 @@ export default async function BrandingPage() {
         initial={{
           ...branding,
           terminal_theme: terminalCfg.theme.name,
-          terminal_background_url: terminalCfg.backgroundUrl,
         }}
         clinicName={clinicName}
       />

@@ -8,38 +8,13 @@ export const dynamic = "force-dynamic";
 
 export default async function LoginPage() {
   const clinicName = process.env.NEXT_PUBLIC_CLINIC_NAME || "Clinic";
-  const { theme, backgroundUrl } = await loadTerminalConfig();
+  const { theme } = await loadTerminalConfig();
 
   return (
     <main
       className="relative min-h-dvh flex items-center justify-center px-5 py-10 text-white overflow-hidden"
-      // Theme gradient applied directly to <main> so it always paints, even
-      // when no custom photo URL is set. Photo (if any) is layered on top
-      // with blur + the theme's dark overlay for legibility.
-      style={
-        !backgroundUrl
-          ? { backgroundImage: theme.gradient, backgroundSize: "cover" }
-          : undefined
-      }
+      style={{ backgroundImage: theme.gradient, backgroundSize: "cover" }}
     >
-      {backgroundUrl && (
-        <>
-          <div
-            className="absolute inset-0 scale-110 blur-2xl"
-            style={{
-              backgroundImage: `url('${backgroundUrl}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(180deg, ${theme.overlayTop} 0%, ${theme.overlayBottom} 100%)`,
-            }}
-          />
-        </>
-      )}
       <div className="absolute top-0 inset-x-0 h-[3px]" style={{ background: theme.accent }} />
 
       <div className="w-full max-w-sm relative">

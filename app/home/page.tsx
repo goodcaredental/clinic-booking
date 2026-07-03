@@ -122,7 +122,6 @@ export default async function HomePage() {
       <ClinicConsole
         clinicName={clinicName}
         theme={terminalCfg.theme}
-        backgroundUrl={terminalCfg.backgroundUrl}
         counts={{
           pending: pendingCount || 0,
           recalls: recallsDue,

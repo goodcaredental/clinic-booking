@@ -9,7 +9,6 @@ type Branding = {
   button_radius: "sharp" | "rounded" | "pill";
   logo_url: string | null;
   terminal_theme: "navy" | "midnight" | "dawn" | "sage" | "mono";
-  terminal_background_url: string | null;
 };
 
 // Mirrors lib/terminal-theme.ts — kept here for the live preview chip
@@ -110,7 +109,6 @@ export default function BrandingEditor({
   const [radius, setRadius] = useState<Branding["button_radius"]>(initial.button_radius);
   const [logo, setLogo] = useState(initial.logo_url || "");
   const [terminalTheme, setTerminalTheme] = useState<Branding["terminal_theme"]>(initial.terminal_theme || "navy");
-  const [terminalBg, setTerminalBg] = useState(initial.terminal_background_url || "");
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 
@@ -147,7 +145,9 @@ export default function BrandingEditor({
           button_radius: radius,
           logo_url: logo.trim() || null,
           terminal_theme: terminalTheme,
-          terminal_background_url: terminalBg.trim() || null,
+          // Wipe any pre-existing custom background — the theme presets
+          // are now the only lockscreen backdrop, so this setting is deprecated.
+          terminal_background_url: null,
         }),
       });
       const data = await res.json();
@@ -197,19 +197,6 @@ export default function BrandingEditor({
                 <div className="text-[10px] text-white/80 drop-shadow mt-0.5">{opt.description}</div>
               </button>
             ))}
-          </div>
-          <div>
-            <label className="label">Custom terminal background (optional)</label>
-            <input
-              type="url"
-              className="input"
-              value={terminalBg}
-              onChange={(e) => setTerminalBg(e.target.value)}
-              placeholder="https://example.com/photo.jpg"
-            />
-            <p className="text-[11px] text-stone-500 mt-1">
-              When set, this photo replaces the theme gradient on the lockscreen — auto-blurred + tinted so the clock stays readable. Wide landscape photos (≥1920×1080) work best.
-            </p>
           </div>
         </div>
 

@@ -126,7 +126,6 @@ const DOCTOR_CATEGORIES: Category[] = [
 export default function ClinicConsole({
   clinicName,
   theme,
-  backgroundUrl,
   counts,
   todayBookings = [],
   roomsEnabled = false,
@@ -135,7 +134,6 @@ export default function ClinicConsole({
 }: {
   clinicName: string;
   theme: TerminalTheme;
-  backgroundUrl?: string | null;
   counts: Counts;
   todayBookings?: TodayBooking[];
   // Premium room flow — when roomsEnabled, the upcoming-patients panel shows
@@ -233,36 +231,16 @@ export default function ClinicConsole({
     ? now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })
     : "";
 
-  // Shared background painted directly on the parent container's inline
-  // style — guaranteed to apply (Tailwind arbitrary-value classes like
-  // bg-[#1B2A4A] get JIT-purged when held in variables; inline style is
-  // immune). Photo (if any) is an absolute sibling layered on top.
-  const parentStyle: React.CSSProperties = backgroundUrl
-    ? { background: "#1B2A4A" }
-    : { backgroundImage: theme.gradient, backgroundSize: "cover" };
+  // Theme gradient painted directly on the parent container's inline style
+  // — guaranteed to apply (Tailwind arbitrary-value classes get JIT-purged
+  // when held in variables; inline style is immune).
+  const parentStyle: React.CSSProperties = {
+    backgroundImage: theme.gradient,
+    backgroundSize: "cover",
+  };
 
   const bg = (
-    <>
-      {backgroundUrl && (
-        <>
-          <div
-            className="absolute inset-0 scale-110 blur-2xl"
-            style={{
-              backgroundImage: `url('${backgroundUrl}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(180deg, ${theme.overlayTop} 0%, ${theme.overlayBottom} 100%)`,
-            }}
-          />
-        </>
-      )}
-      <div className="absolute top-0 inset-x-0 h-[3px]" style={{ background: theme.accent }} />
-    </>
+    <div className="absolute top-0 inset-x-0 h-[3px]" style={{ background: theme.accent }} />
   );
 
   const categories =
